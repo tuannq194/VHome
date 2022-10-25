@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/red"
+    tools:context=".ui.liveview.LiveViewFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_white_1_conner"/>
+    <TextView
+        android:id="@+id/cameraSo1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Camera số 1"
+        android:fontFamily="@font/svn_gotham_regular"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/viewCameraSo1"
+        android:layout_width="match_parent"
+        android:layout_height="233dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraSo1">
+
+        <org.videolan.libvlc.util.VLCVideoLayout
+            android:id="@+id/videoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="screenTapped"
+            />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="118dp"
+        android:layout_height="118dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/background_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/buttonAuto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button_auto"
+            android:fontFamily="@font/svn_gotham_regular"
+            android:text="Tự động"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonUp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:paddingTop="10.27dp"
+            android:drawableTop="@drawable/ic_control_up"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAuto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonRight"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:drawableRight="@drawable/ic_control_right"
+            android:paddingRight="10.27dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonAuto"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonBot"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:paddingBottom="10.27dp"
+            android:drawableBottom="@drawable/ic_control_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAuto" />
+
+        <Button
+            android:id="@+id/buttonLeft"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:paddingLeft="10.27dp"
+            android:drawableLeft="@drawable/ic_control_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAuto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/svn_gotham_light"
+        android:gravity="center"
+        android:text="Ấn mũi tên để điều khiển các hướng, hoặc nhấn nút tròn\nchính giữa để camera kích hoạt chế độ tự động quay"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/viewCameraSo1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonMic"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_in_liveview"
+                android:drawableTop="@drawable/ic_mic_off"
+                android:paddingTop="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Đàm thoại"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonHistory"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_in_liveview"
+                android:drawableTop="@drawable/ic_history"
+                android:paddingTop="15.65dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Xem lịch sử"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonRecord"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_in_liveview"
+                android:drawableTop="@drawable/ic_record"
+                android:paddingTop="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Ghi hình"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonPhoto"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_in_liveview"
+                android:drawableTop="@drawable/ic_photo"
+                android:paddingTop="14.24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Chụp ảnh"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="138dp"
+        android:background="@drawable/background_liveview_footer"
+        android:gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="42dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonShare"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/ic_share"
+                app:backgroundTint="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Chia sẻ"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonLibrary"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/ic_library"
+                app:backgroundTint="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:text="Chia sẻ"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonMultiView"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/ic_multi_view"
+                app:backgroundTint="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:gravity="center"
+                android:text="Xem nhiều\nmàn hình"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonDefense"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/ic_defense"
+                app:backgroundTint="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/svn_gotham_light"
+                android:gravity="center"
+                android:text="Phòng vệ\nchủ động"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,10 @@
 package com.bikeshare.vhome.data.model
 
 import com.google.gson.JsonArray
-import org.json.JSONObject
 
-data class AttributesResponse(
+data class DevicesResponse(
     val total: Int,
     val offset: Int,
     val limit: Int,
-    val devices: ArrayList<Any>
+    val devices: JsonArray
 )

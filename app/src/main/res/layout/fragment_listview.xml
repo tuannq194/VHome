@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.listview.ListViewFragment">
+    tools:context=".ui.camerahome.listView.ListViewFragment">
 
     <!--
         <ImageView
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -118,7 +118,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/buttonLibrary"
+                android:id="@+id/buttonEvent"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/ic_event"
@@ -183,7 +183,7 @@
                 android:textColor="@color/black"
                 android:textSize="10sp" />
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cameraSo1"

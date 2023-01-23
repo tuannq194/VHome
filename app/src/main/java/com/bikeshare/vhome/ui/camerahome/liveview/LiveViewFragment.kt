@@ -1,4 +1,4 @@
-package com.bikeshare.vhome.ui.liveview
+package com.bikeshare.vhome.ui.camerahome.liveview
 
 import android.net.Uri
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bikeshare.vhome.R
 import com.bikeshare.vhome.databinding.FragmentLiveviewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.videolan.libvlc.LibVLC

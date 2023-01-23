@@ -2,7 +2,6 @@ package com.bikeshare.vhome.ui.login
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import com.bikeshare.vhome.repository.VHomeRepository
 import com.bikeshare.vhome.util.Event
 
 import com.bikeshare.vhome.util.Resource
+import com.bikeshare.vhome.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -41,11 +41,12 @@ class LoginViewModel @Inject constructor(
 
     private fun handleLoginResponse(response: Response<LoginResponse>): Resource<LoginResponse> {
         if (response.isSuccessful) {
-            Log.d("LOGIN_VIEW_MODEL", response.body()?.org_name.toString())
+            Log.d("LOGIN_RETROFIT_SUCCESS", response.body()?.org_name.toString())
             response.body()?.let { resultResponse ->
-                if (loginResponse == null){
+                //Fix it
+                /*if (loginResponse == null){
                     loginResponse = resultResponse
-                }
+                }*/
                 return Resource.Success(loginResponse ?: resultResponse)
             }
         } else {
@@ -54,7 +55,7 @@ class LoginViewModel @Inject constructor(
         return Resource.Error((loginResponse ?: response.message()).toString())
     }
 
-    suspend fun saveAccessTokens(accessToken: String) {
-        vHomeRepository.saveAccessTokens(accessToken)
+    suspend fun saveUserInformation(accessToken: String, orgId: String, username: String) {
+        vHomeRepository.saveUserInformation(accessToken, orgId, username)
     }
 }

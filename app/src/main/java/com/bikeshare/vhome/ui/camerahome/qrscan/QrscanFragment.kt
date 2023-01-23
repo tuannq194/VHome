@@ -1,15 +1,12 @@
-package com.bikeshare.vhome.ui.qrscan
+package com.bikeshare.vhome.ui.camerahome.qrscan
 
-import android.app.Activity
-import android.content.pm.PackageManager
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,13 +16,14 @@ import androidx.navigation.fragment.findNavController
 import com.bikeshare.vhome.R
 import com.bikeshare.vhome.data.UserPreferences
 import com.bikeshare.vhome.data.model.AttributesPost
-import com.bikeshare.vhome.data.model.PreCheckPost
 import com.bikeshare.vhome.databinding.FragmentQrscanBinding
 import com.bikeshare.vhome.util.Resource
 import com.budiyev.android.codescanner.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.tbruyelle.rxpermissions3.RxPermissions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -33,13 +31,12 @@ private const val CAMERA_REQUEST_CODE = 101
 
 @AndroidEntryPoint
 class QrscanFragment : Fragment() {
-    private lateinit var codeScanner: CodeScanner
-
     private val viewModel: QrscanViewModel by viewModels()
 
     private var _binding: FragmentQrscanBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var codeScanner: CodeScanner
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +46,57 @@ class QrscanFragment : Fragment() {
         _binding = FragmentQrscanBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        setupPermissions()
+        return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /** Kiểm tra quyền để quét QR bằng Camera*/
+        checkPermissions()
+
+        /** Lắng nghe response Attributes Camera */
+        viewModel.attributesResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let {
+                when (it) {
+                    is Resource.Success -> {
+                        Log.d("QRSCAN_OBSERVER", it.data!!.devices.toString())
+                        if (it.data.total == 0) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                findNavController().navigate(R.id.action_qrscanFragment_to_QRScanResultFragment)
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Camera đã được thêm vào tài khoản khác", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    is Resource.Error -> {
+                        Toast.makeText(requireContext(), "Scan Failure", Toast.LENGTH_LONG).show()
+                        Log.e("QRSCAN_OBSERVER_ERROR", it.data.toString())
+                    }
+                }
+            }
+        })
+    }
+
+    /** Kiểm tra quyền ứng dụng */
+    private fun checkPermissions(){
+        val rxPermissions = RxPermissions(this)
+
+        rxPermissions
+            .request(
+                Manifest.permission.CAMERA
+            )
+            .subscribe { granted ->
+                if (granted) {
+                    scanQR()
+                } else {
+                    Toast.makeText(requireContext(),"Please Allow App To Access Camera Then Retry",Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    /** Quét mã QR*/
+    private fun scanQR(){
         codeScanner = CodeScanner(requireActivity(), binding.scannerView)
 
         codeScanner.apply {
@@ -71,7 +117,11 @@ class QrscanFragment : Fragment() {
             }
             errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
                 getActivity()?.runOnUiThread {
-                    Toast.makeText(requireActivity(), "Camera initialization error: ${it.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Camera initialization error: ${it.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -79,78 +129,40 @@ class QrscanFragment : Fragment() {
         binding.scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
-
-        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.attributesResponseLiveData.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
-                when(it){
-                    is Resource.Success -> {
-                        Log.d("QRSCAN_SUCCESS_RES", it.data!!.devices.toString())
-                        if (it.data!!.total == 0) {
-                            lifecycleScope.launch {
-                                //viewModel.saveCameraInfomation()
-                                findNavController().navigate(R.id.QRScanResultFragment)
-                            }
-
-                        } else {
-                            Toast.makeText(requireContext(), "Camera đã được thêm vào tài khoản khác", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Scan Failure", Toast.LENGTH_LONG).show()
-                        Log.e("QRSCAN_ERROR_RES", it.data.toString())
-                    }
-                }
-            }
-        })
-    }
-
+    /** Kiểm tra Camera đã được thêm vào tài khoản chưa */
     private fun onAttributes(cameraInfo: String) {
         Toast.makeText(requireActivity(), "QRSCAN_RESULT: ${cameraInfo}", Toast.LENGTH_LONG).show()
-        Log.d("QRSCAN_RESULT", cameraInfo)
 
         val userPreferences = UserPreferences(requireContext())
-        val cameraSerial = cameraInfo.substring(13,25)
-        val type: String = "AND"
+
+        val splits = cameraInfo.split(" ").toTypedArray()
+        val cameraManufacturer = splits[0]
+        val cameraModel = splits[1]
+        val cameraSerial = splits[2]
+        val cameraVerificationCode = splits[3]
+        Log.d("QRSCAN_RESULT", cameraManufacturer + " " + cameraModel + " " + cameraSerial + " " + cameraVerificationCode)
+
+        viewModel.saveCameraInformation(cameraManufacturer, cameraModel, cameraSerial, cameraVerificationCode)
+
+        val type = "AND"
         val queries = JsonArray()
         val `object` = JsonObject()
         `object`.addProperty("key", "device_serial")
         `object`.addProperty("value", cameraSerial)
         queries.add(`object`)
 
-        val attributesPost = AttributesPost(type,queries)
+        val attributesPost = AttributesPost(type, queries)
 
         userPreferences.accessToken.asLiveData().observe(viewLifecycleOwner, Observer {
-            //Toast.makeText(requireContext(),it ?: "Token is null", Toast.LENGTH_LONG).show()
             viewModel.attributes(it.toString(), attributesPost)
         })
     }
 
-    private fun onPreCheck(cameraInfo: String) {
-        val userPreferences = UserPreferences(requireContext())
-        Log.d("QRSCAN_RESULT", cameraInfo)
-        val cameraSerial: String = "CNME10000023"
-        val cameraVerificationCode: String = "QRHT28"
-        val preCheckPost = PreCheckPost(cameraSerial,cameraVerificationCode)
-
-        //Lấy token "it" và gán vào header
-        userPreferences.accessToken.asLiveData().observe(viewLifecycleOwner, Observer {
-            Toast.makeText(requireContext(),it ?: "Token is null", Toast.LENGTH_LONG).show()
-            viewModel.preCheck(it.toString(), preCheckPost)
-        })
-    }
-
-    private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.CAMERA
-        )
-
+    /** Kiểm tra quyền ứng dụng cách cũ*/
+    /*private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             makeRequest()
         }
@@ -183,5 +195,5 @@ class QrscanFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 }

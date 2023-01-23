@@ -9,6 +9,7 @@
     android:background="@drawable/background"
     tools:context=".ui.login.LoginFragment">
 
+
     <ImageView
         android:id="@+id/imageViewLogo"
         android:layout_width="wrap_content"
@@ -178,7 +179,7 @@
         android:id="@+id/button2"
         android:layout_width="183sp"
         android:layout_height="43sp"
-        android:background="@drawable/button_register"
+        android:background="@drawable/button_red_stroke"
         android:text="ĐĂNG KÝ NGAY"
         android:fontFamily="@font/averta_std_cy_bold_1"
         android:letterSpacing="0.001"

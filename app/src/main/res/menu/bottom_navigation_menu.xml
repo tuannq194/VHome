@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/camera_home_nav"
+        android:icon="@drawable/ic_home"
+        android:title="Trang chủ" />
+
+    <item
+        android:id="@+id/camera_event_nav"
+        android:icon="@drawable/ic_event"
+        android:title="Sự kiện" />
+    <item
+        android:id="@+id/menu_settting"
+        android:icon="@drawable/ic_setting"
+        android:title="Cài đặt" />
+
+</menu>
